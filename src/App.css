@@ -1,179 +1,40 @@
-import { useState } from 'react'
-import './App.css'
-
-interface Cliente {
-  id: number
-  nombre: string
-  email: string
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  background: #0a0a0a; 
+  color: #00f0ff; 
+  font-family: Arial; 
 }
-
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [usuario, setUsuario] = useState('')
-  const [password, setPassword] = useState('')
-  const [clientes, setClientes] = useState<Cliente[]>([])
-  const [nombre, setNombre] = useState('')
-  const [email, setEmail] = useState('')
-
-  const credencialesValidas = {
-    usuario: 'berzosaneuro',
-    password: 'berzosa15031980'
-  }
-
-  const handleLogin = () => {
-    if (usuario === credencialesValidas.usuario && password === credencialesValidas.password) {
-      setIsLoggedIn(true)
-    }
-  }
-
-  const handleLogout = () => {
-    setIsLoggedIn(false)
-    setUsuario('')
-    setPassword('')
-  }
-
-  const agregarCliente = () => {
-    if (nombre && email) {
-      const nuevoCliente: Cliente = {
-        id: Date.now(),
-        nombre,
-        email
-      }
-      setClientes([...clientes, nuevoCliente])
-      setNombre('')
-      setEmail('')
-    }
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <div className="cyberpunk-app login-screen">
-        <header className="cyber-header">
-          <div className="logo-cyber">
-            <span className="logo-text">CYBER</span>
-            <span className="logo-text-secondary">CRM</span>
-          </div>
-        </header>
-        <main className="login-content">
-          <div className="login-card">
-            <div className="login-glow"></div>
-            <h1 className="login-title">ACCESO RESTRINGIDO</h1>
-            
-            <div className="cyber-input">
-              <input
-                type="text"
-                placeholder="USUARIO"
-                value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              />
-              <div className="input-glow"></div>
-            </div>
-
-            <div className="cyber-input">
-              <input
-                type="password"
-                placeholder="CONTRASEÑA"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              />
-              <div className="input-glow"></div>
-            </div>
-
-            <button 
-              className="cyber-button login-button"
-              onClick={handleLogin}
-            >
-              ENTRAR SISTEMA
-            </button>
-
-            <div className="credentials-hint">
-              👉 berzosaneuro / berzosa15031980
-            </div>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
-  return (
-    <div className="cyberpunk-app">
-      <header className="cyber-header">
-        <div className="logo-cyber">
-          <span className="logo-text">CYBER</span>
-          <span className="logo-text-secondary">CRM</span>
-        </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          SALIR
-        </button>
-      </header>
-
-      <main className="cyber-content">
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-number">{clientes.length}</div>
-            <div className="stat-label">CLIENTES</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">●</div>
-            <div className="stat-label">ONLINE</div>
-          </div>
-        </div>
-
-        <div className="clientes-section">
-          <h2 className="section-title">CLIENTES CONECTADOS</h2>
-          {clientes.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-glow">NO_DATA</div>
-              <p>AGREGAR PRIMER CLIENTE</p>
-            </div>
-          ) : (
-            <div className="clientes-list">
-              {clientes.map((cliente) => (
-                <div key={cliente.id} className="client-card">
-                  <div className="client-avatar"></div>
-                  <div className="client-info">
-                    <div className="client-name">{cliente.nombre}</div>
-                    <div className="client-email">{cliente.email}</div>
-                  </div>
-                  <div className="client-status active"></div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </main>
-
-      <div className="input-section">
-        <div className="cyber-input">
-          <input
-            type="text"
-            placeholder="NOMBRE"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-          <div className="input-glow"></div>
-        </div>
-        <div className="cyber-input">
-          <input
-            type="email"
-            placeholder="EMAIL"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <div className="input-glow"></div>
-        </div>
-        <button
-          className="cyber-button"
-          onClick={agregarCliente}
-          disabled={!nombre || !email}
-        >
-          AGREGAR CLIENTE
-        </button>
-      </div>
-    </div>
-  )
+.cyberpunk-app { min-height: 100vh; background: #0a0a0a; }
+.cyber-header { 
+  position: fixed; top: 0; left: 0; right: 0; height: 70px; 
+  background: rgba(10,10,10,0.9); border-bottom: 1px solid #00f0ff; 
+  display: flex; align-items: center; justify-content: space-between; 
+  padding: 0 30px; z-index: 1000; 
 }
-
-export default App
+.logo-text { 
+  font-size: 28px; font-weight: bold; 
+  background: linear-gradient(45deg, #00f0ff, #0077ff); 
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+}
+.login-content { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.login-card { 
+  background: rgba(10,10,10,0.9); border: 1px solid #00f0ff; 
+  border-radius: 15px; padding: 50px; max-width: 400px; width: 100%; 
+}
+.login-title { text-align: center; font-size: 24px; margin-bottom: 30px; color: #00f0ff; }
+.cyber-input input { 
+  width: 100%; padding: 15px; margin: 10px 0; 
+  background: rgba(10,10,10,0.8); border: 1px solid #00f0ff; 
+  border-radius: 8px; color: #00f0ff; font-size: 16px; 
+}
+.cyber-button { 
+  width: 100%; padding: 15px; background: linear-gradient(45deg, #00f0ff, #0077ff); 
+  color: black; border: none; border-radius: 8px; font-size: 16px; 
+  font-weight: bold; cursor: pointer; margin-top: 10px; 
+}
+.cyber-content { padding: 100px 20px 200px; max-width: 600px; margin: 0 auto; }
+.input-section { 
+  position: fixed; bottom: 0; left: 0; right: 0; 
+  background: rgba(10,10,10,0.9); padding: 20px; border-top: 1px solid #00f0ff; 
+}
+.credentials-hint { margin-top: 20px; text-align: center; font-size: 12px; color: #00f0ff; opacity: 0.7; }
