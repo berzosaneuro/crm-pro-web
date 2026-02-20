@@ -8,53 +8,68 @@ interface Cliente {
 }
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [usuario, setUsuario] = useState('')
+  const [password, setPassword] = useState('')
   const [clientes, setClientes] = useState<Cliente[]>([])
+  const [nombre, setNombre] = useState('')
+  const [email, setEmail] = useState('')
 
-  const agregarCliente = (nombre: string, email: string) => {
-    const nuevoCliente: Cliente = {
-      id: Date.now(),
-      nombre,
-      email
-    }
-    setClientes([...clientes, nuevoCliente])
+  // 👇 TUS CREDENCIALES PERSONALES
+  const credencialesValidas = {
+    usuario: 'berzosaneuro',
+    password: 'berzosa15031980'
   }
 
-  return (
-    <div className="App">
-      <h1>🚀 CRM PRO</h1>
-      
-      <div className="clientes-lista">
-        <h2>Clientes ({clientes.length})</h2>
-        {clientes.length === 0 ? (
-          <p>👆 Agrega tu primer cliente</p>
-        ) : (
-          <ul>
-            {clientes.map(cliente => (
-              <li key={cliente.id}>
-                📧 {cliente.nombre} - {cliente.email}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+  const handleLogin = () => {
+    if (usuario === credencialesValidas.usuario && password === credencialesValidas.password) {
+      setIsLoggedIn(true)
+    }
+  }
 
-      <div className="formulario">
-        <input type="text" placeholder="Nombre cliente" id="nombre" />
-        <input type="email" placeholder="Email cliente" id="email" />
-        <button onClick={() => {
-          const nombre = (document.getElementById('nombre') as HTMLInputElement).value
-          const email = (document.getElementById('email') as HTMLInputElement).value
-          if (nombre && email) {
-            agregarCliente(nombre, email)
-            ;(document.getElementById('nombre') as HTMLInputElement).value = ''
-            ;(document.getElementById('email') as HTMLInputElement).value = ''
-          }
-        }}>
-          ➕ Agregar Cliente
-        </button>
-      </div>
-    </div>
-  )
-}
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    setUsuario('')
+    setPassword('')
+  }
 
-export default App
+  const agregarCliente = () => {
+    if (nombre && email) {
+      const nuevoCliente: Cliente = {
+        id: Date.now(),
+        nombre,
+        email
+      }
+      setClientes([...clientes, nuevoCliente])
+      setNombre('')
+      setEmail('')
+    }
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <div className="cyberpunk-app login-screen">
+        <header className="cyber-header">
+          <div className="logo-cyber">
+            <span className="logo-text">CYBER</span>
+            <span className="logo-text-secondary">CRM</span>
+          </div>
+        </header>
+
+        <main className="login-content">
+          <div className="login-card">
+            <div className="login-glow"></div>
+            <h1 className="login-title">ACCESO RESTRINGIDO</h1>
+            
+            <div className="cyber-input">
+              <input
+                type="text"
+                placeholder="USUARIO"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              />
+              <div className="input-glow"></div>
+            </div>
+
+            <div className="cyber-inp
